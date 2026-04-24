@@ -1,7 +1,5 @@
 from bot_parser import parse_expense, format_reply, handle_command
 from database import insert_expense, get_summary_today, get_summary_month
-from parser import parse_expense, format_reply, handle_command
-from database import insert_expense, get_summary_today, get_summary_month
 
 app = FastAPI()
 
