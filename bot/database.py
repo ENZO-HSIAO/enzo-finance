@@ -81,4 +81,6 @@ def get_summary_month() -> str:
                  "訂閱": "📱", "醫療": "💊", "住宿": "🏠", "教育": "📚", "其他": "📝"}
     for cat, amt in sorted(by_cat.items(), key=lambda x: -x[1]):
         emoji = emoji_map.get(cat, "📝")
-        pct =
+        pct = amt / total * 100
+        lines.append(f"{emoji} {cat}：NT$ {amt:,.0f} ({pct:.0f}%)")
+    return "\n".join(lines)
