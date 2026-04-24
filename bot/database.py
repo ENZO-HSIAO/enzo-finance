@@ -2,8 +2,8 @@ import os
 from supabase import create_client, Client
 from datetime import datetime, date
 
-SUPABASE_URL = os.environ["SUPABASE_URL"]
-SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+SUPABASE_URL = "https://zofdsownonnuuwsmhnjy.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvZmRzb3dub25udXV3c21obmp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NDc5NzcsImV4cCI6MjA5MjUyMzk3N30.aXVehZNR4zaMYtCkE5EeU21HCMqO8JLHH8e3DpsoOmo"
 
 def get_client() -> Client:
     return create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -22,6 +22,24 @@ def insert_expense(expense: dict) -> bool:
     except Exception as e:
         print(f"DB insert error: {e}")
         return False
+
+def delete_expense(expense_id: int) -> bool:
+    try:
+        sb = get_client()
+        sb.table("expenses").delete().eq("id", expense_id).execute()
+        return True
+    except Exception as e:
+        print(f"DB delete error: {e}")
+        return False
+
+def get_recent_expenses(limit: int = 5) -> list:
+    try:
+        sb = get_client()
+        res = sb.table("expenses").select("*").order("created_at", desc=True).limit(limit).execute()
+        return res.data
+    except Exception as e:
+        print(f"DB query error: {e}")
+        return []
 
 def get_today_expenses() -> list:
     try:
